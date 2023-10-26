@@ -1,0 +1,7 @@
+/- Define the Uniform distribution on an interval-/
+
+open scoped ENNReal NNReal Real
+
+noncomputable
+def exponentialPDFReal (rate : ℝ) (ratePos : rate > 0) (x : ℝ): ℝ :=
+ite (x ≥ 0) (rate*(Real.exp (-(↑rate*↑x)))) 0
