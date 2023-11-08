@@ -142,9 +142,9 @@ lemma uniformCdf_eq_zero (x : ℝ) (hx: x < a ⊓ b) : ((uniformCdfReal a b hab)
   dsimp [uniformPdf, uniformPdfReal, indicator, uIcc];
   rw [set_lintegral_congr_fun measurableSet_Iic, lintegral_zero]; rfl
   apply ae_of_all
-  simp only [mem_Iic, mem_Icc, inf_le_iff, ENNReal.ofReal_zero, ENNReal.ofReal_eq_zero]
-  intro y hy
-  rw [if_neg (by push_neg; rintro (fal|fal) <;> simp at hx <;> linarith )]
+  rintro y  (hy : y ≤ _)
+  rw [if_neg _, ENNReal.ofReal_zero]
+  rintro ⟨ _, _ ⟩; linarith
 
 lemma uniformCdf_eq_fromInf (x : ℝ) (h : a ⊓ b ≤ x) : ((uniformCdfReal a b hab) x) =
      ENNReal.toReal (∫⁻ (x' : ℝ) in Icc (a ⊓ b) x, uniformPdf a b x')  := by
@@ -154,20 +154,18 @@ lemma uniformCdf_eq_fromInf (x : ℝ) (h : a ⊓ b ≤ x) : ((uniformCdfReal a b
 
 lemma uniformCdf_eq_toSup (x : ℝ) (h : a ⊔ b ≤ x) : ((uniformCdfReal a b hab) x) =
     ENNReal.toReal (∫⁻ (x' : ℝ) in Icc (a ⊓ b) (a ⊔ b), uniformPdf a b x') := by
-  rw [uniformCdf_eq_fromInf _ (le_trans inf_le_sup h), (Icc_union_Ioc_eq_Icc inf_le_sup h).symm]
-  rw [lintegral_union measurableSet_Ioc ?dis]
+  rw [uniformCdf_eq_fromInf _ (le_trans inf_le_sup h), (Icc_union_Ioc_eq_Icc inf_le_sup h).symm,
+      lintegral_union measurableSet_Ioc ?dis]
   have : ∫⁻ (a_1 : ℝ) in Ioc (a ⊔ b) x, uniformPdf a b a_1 = 0 := by
-    unfold uniformPdf uniformPdfReal indicator uIcc;
-    simp only [ge_iff_le, sup_le_iff, not_and, not_le, gt_iff_lt, lt_sup_iff, le_sup_iff, inf_le_left, inf_le_right,
-      or_self, not_true, lt_inf_iff, sup_lt_iff, lt_self_iff_false, false_and, and_false, and_self, mem_Icc,
-      inf_le_iff, one_div]
-    rw [set_lintegral_congr_fun measurableSet_Ioc (g := fun _ => 0)]; exact lintegral_zero
-    apply ae_of_all; intro x' hx'; rw [if_neg]; exact ENNReal.ofReal_zero
-    intro fal; simp at hx'; rcases fal.right <;> linarith
-  simp [this];
-  rw [Set.disjoint_iff]; rintro x ⟨h1, h2⟩;
-  simp only [mem_Icc] at h1 ; simp only [gt_iff_lt, not_lt, ge_iff_le, mem_Ioc] at h2
-  linarith
+    unfold uniformPdf uniformPdfReal indicator uIcc
+    rw [set_lintegral_congr_fun measurableSet_Ioc, lintegral_zero]
+    apply ae_of_all
+    rintro x' ⟨(hx' : _ < x'),_ ⟩
+    rw [if_neg, ENNReal.ofReal_zero]
+    rintro ⟨_, _⟩; linarith
+  simp [this]
+  rw [Set.disjoint_iff]
+  rintro x ⟨⟨_, h2⟩, ⟨h3, _⟩⟩; linarith
 
 lemma uniformCdf_eq {a b : ℝ} (hab : a ≠ b) : (uniformCdfReal a b hab) =
     fun x => ite ((a ⊓ b) ≤ x) (min ((x- (a ⊓ b))/((a ⊔ b) - (a ⊓ b))) 1) 0 := by
