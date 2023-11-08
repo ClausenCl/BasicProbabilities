@@ -12,6 +12,7 @@ Define the Exponential Measure over the Reals
 * `exponentialPdf`: `ℝ≥0∞`-valued pdf, `exponentialPdf rate ratePos = ENNReal.ofReal (exponentialPdfReal rate ratePos)`.
 * `expMeasure`: an exponential measure on `ℝ`, parametrized by its rate `rate`.
 * `exponentialCdfReal` : the Cdf given by the Definition of CDF in `ProbabilityTheory.Cdf` on
+  the `exponentialPdf`.
 
 ## Main results
 * `ExpCDF_eq`: Proof that the `exponentialCdfReal` given by the Definition equals the known
