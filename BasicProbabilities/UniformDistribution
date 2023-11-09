@@ -16,7 +16,7 @@ Define the Uniform Measure over Intervals on the reals
 * `uniformPdfReal`: the function `a b x ↦ 1/(abs (b-a))` for `x ∈ uIcc a b` or `0` else, which is
   the probability density function of a uniform distribution on the Interval `[(a ⊓ b), (a ⊔ b)]`).
 * `uniformPdf`: `ℝ≥0∞`-valued pdf, `uniformPdf a b x = ENNReal.ofReal (uniformPdfReal a b x)`.
-* `uniformMeasure`: an uniform measure on `ℝ`.
+* `uniformMeasure`: The uniform measure on `ℝ` defined by `a` and `b`.
 * `uniformCdfReal`: the Cdf given by the Definition of CDF in
   `ProbabilityTheory.Cdf` on the `uniformPdf`.
 
